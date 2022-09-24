@@ -36,7 +36,7 @@ chmod +x ./*
 In directory with repository run "start": f. e.
 ``` bash
 
-/home/"Your user"/scripts/start
+./start
 ````
 If console print:
 ``` bash
