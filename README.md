@@ -39,7 +39,7 @@ If console print:
 "Do you want to start 'mongod' now? [yn] " yn
 
 ```
-press "n" and "Enter".
+press "y" and "Enter".
 
 
 After script completion in your home directory added directory "crits".
