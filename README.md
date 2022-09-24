@@ -12,9 +12,9 @@ This script make you installation CRITs very easy.
 
 You need install and configure "sudo".
 
-## How use it
+# How use it
 
-# STEP 1
+## STEP 1
 
 Copy files in any directory: f. e.
 ``` bash
@@ -26,7 +26,7 @@ Copy files in any directory: f. e.
 * stable_requirements.txt
 * start
 
-# STEP 2
+## STEP 2
 
 In directory with scripts run "start": f. e.
 ``` bash
@@ -49,7 +49,7 @@ After script completion in your home directory added directory "crits".
 ```
 
 
-# STEP 3
+## STEP 3
 
 Change dir to crits directory
 ```bash
