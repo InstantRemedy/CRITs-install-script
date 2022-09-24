@@ -56,17 +56,16 @@ Change dir to crits directory
 
 cd /home/"Your user"/crits/crits
 ```
+Run mongodb:
+```bash
+
+./contrib/mongo/mongod_start.sh
+```
 
 Create new admin:
 ```bash
 
 python2 ./manage.py users -a -u admin -e "Your email" -R UberAdmin
-```
-
-Run mongodb:
-```bash
-
-./contrib/mongo/mongod_start.sh
 ```
 
 Run server:
