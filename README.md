@@ -16,19 +16,24 @@ You need install and configure "sudo".
 
 ## STEP 1
 
-Copy files in any directory: f. e.
+Clone this repository:
 ``` bash
 
-/home/"Your user"/scripts:
+https://github.com/krys3331/CRITs-install-script
 ```
-* bootstrap
-* server
-* stable_requirements.txt
-* start
+
+Give executable mod for all files
+``` bash
+
+cd CRITs-install-script
+
+chmod +x ./*
+
+```
 
 ## STEP 2
 
-In directory with scripts run "start": f. e.
+In directory with repository run "start": f. e.
 ``` bash
 
 /home/"Your user"/scripts/start
