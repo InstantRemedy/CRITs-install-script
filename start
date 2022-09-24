@@ -1,0 +1,14 @@
+#!/bin/bash
+CURDIR=${PWD}
+mkdir ${HOME}/crits
+cd ${HOME}/crits
+sudo apt install git
+git clone https://github.com/crits/crits.git
+cd ${CURDIR}
+mv ${CURDIR}/bootstrap ${HOME}/crits/crits/script/bootstrap
+mv ${CURDIR}/server ${HOME}/crits/crits/script/server
+mv ${CURDIR}/stable_requirements.txt ${HOME}/crits/crits/stable_requirements.txt
+cd ${HOME}/crits/crits
+./script/bootstrap
+cd ${CURDIR}
+rm -r ${CURDIR}/start
