@@ -36,7 +36,7 @@ chmod +x ./*
 In directory with repository run "start": f. e.
 ``` bash
 
-./start
+./install_crits
 ````
 If console print:
 ``` bash
