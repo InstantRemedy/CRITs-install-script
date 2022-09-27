@@ -47,10 +47,10 @@ If console print:
 press "y" and "Enter".
 
 
-After script completion in your home directory added directory "crits".
+After script completion in directory "/data" added directory "crits".
 ```bash
 
-/home/"Your user"/crits
+/data/crits
 ```
 
 
@@ -59,7 +59,7 @@ After script completion in your home directory added directory "crits".
 Change dir to crits directory
 ```bash
 
-cd /home/"Your user"/crits/crits
+cd /data/crits
 ```
 Run mongodb:
 ```bash
