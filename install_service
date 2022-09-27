@@ -2,7 +2,7 @@
 CURDIR=${PWD}
 main()
 {
-	sudo apt-get install libpcap-dev libpq-dev
+	sudo apt-get install libpcap-dev libpq-dev -y
 	mkdir /data/crits_services
 	cp ${CURDIR}/stable_service_requirements.txt /data/crits_services/stable_service_requirements.txt
 	cp -r ${CURDIR}/services/* /data/crits_services/
