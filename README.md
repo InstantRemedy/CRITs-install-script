@@ -1,4 +1,4 @@
-## CRITs-install-script
+# CRITs-install-script
 
 This script make you installation CRITs very easy.
 
@@ -76,7 +76,23 @@ python2 ./manage.py users -a -u admin -e "Your email" -R UberAdmin
 Run server:
 ```bash
 
-./script/server
+./script/server'
 ```
 
+# Installing services
+
+## STEP 1
+
+In directory with repository run command
+```bash
+
+./install_service
+```
+## STEP 2
+
+In directory with CRITs use command
+```bash
+
+python2 manage.py setconfig service_dirs /data/crits_services
+```
 **----------------------------------**

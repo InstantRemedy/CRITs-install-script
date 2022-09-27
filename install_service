@@ -1,0 +1,15 @@
+#!/bin/bash
+CURDIR=${PWD}
+main()
+{
+	sudo apt-get install libpcap-dev libpq-dev
+	mkdir /data/crits_services
+	cp ${CURDIR}/stable_service_requirements.txt /data/crits_services/stable_service_requirements.txt
+	cp -r ${CURDIR}/services/* /data/crits_services/
+	cd /data/crits_services
+	pip install -U -r  stable_service_requirements.txt
+	cd ${CURDIR}
+	printf "\n\nIn CRITs directory run\npython2 manage.py setconfig service_dirs /data/crits_services\n\n"
+}
+
+main

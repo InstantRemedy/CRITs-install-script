@@ -1,0 +1,69 @@
+This file will document large changes that anyone tracking development branches
+should be aware of. This will also include things like dependency changes or
+references to changes in other repositories. Updates are sorted by commit date
+descending.
+
+Author: apolkosnik
+Date:   2016-09-21
+
+    For Django 1.10+ support there are some simple changes that need to be done,
+    an example for yara_service follows:
+
+    yara_service/templates/yara_rule_tester_sample_tab.html:
+    -            url: "{% url 'yara_service.views.get_yara_result' subscription.id %}",
+    +            url: "{% url 'yara_service-views-get_yara_result' subscription.id %}",
+
+    yara_service/urls.py:
+    -from django.conf.urls import patterns
+    +from django.conf.urls import url
+    
+    -urlpatterns = patterns('yara_service.views',
+    -    (r'^test_yara_rule/(?P<id_>.+?)/$', 'get_yara_result'),
+    -)
+    +from . import views
+    +
+    +urlpatterns = [
+    +    url(r'^test_yara_rule/(?P<id_>.+?)/$', views.get_yara_result, name='yara_service-views-get_yara_result'),
+    +]
+
+    yara_service/views.py:
+    -from django.shortcuts import HttpResponse, render_to_response
+    -from django.template import RequestContext
+    +from django.shortcuts import HttpResponse, render
+
+    -        return render_to_response("error.html", {"error" : "Expected AJAX POST" }, RequestContext(request))
+    +        return render(request, "error.html", {"error" : "Expected AJAX POST" })    
+
+Author: apolkosnik
+Date:   2016-02-03
+
+    You can run your CRITs-master on Django 1.7 with the latest commit!
+    In order to run on 1.7 you'll have to add an one-liner to forms.py in your
+    custom-made services.
+    You'll need to add the following line:
+        kwargs.setdefault('label_suffix', ':')
+    before every occurrence of the following:
+        super(YourCustomServiceConfigForm, self).__init__(*args, **kwargs)
+    in forms.py inside your custom-made services.
+
+Author: apolkosnik
+Date:   2015-10-23
+
+    The bootstrap has been added to the services in order to simplify the 
+    installation process. Please review Readme.md for a quick overview of how
+    it works.
+
+Author: wxs
+Date:   2015-06-09
+
+    The passivetotal_lookup service has been changed to use their new APIs.
+    Please make sure you have "https://www.passivetotal.org/api/v1" in the
+    service configuration for the query URL. Failure to do so will cause
+    the service to break once the old APIs are removed.
+
+Author: wxs
+Date:   2015-03-31
+
+    The relationship_service received an update which allows it to assign
+    campaigns to nodes on the graph. Part of this change required an update
+    to core CRITs code, so please make sure you update that too.

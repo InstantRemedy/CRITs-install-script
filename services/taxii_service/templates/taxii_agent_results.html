@@ -1,0 +1,246 @@
+
+
+{% block content %}
+{% if poll_msg %}
+<div class="content_box">
+    <h3 class="titleheader">
+        Status: <b>{% if status %}Success{% else %}Failure{% endif %}</b>
+    </h3>
+    <div class="content_body">
+        {% if status %}Message:{% else %}Reason:{% endif %} {{ poll_msg }}
+    </div>
+</div>
+<br>
+<table class="chart" id="poll_data" width="100%" style="margin-bottom: 15px;">
+    <colgroup>
+        <col>
+        <col>
+        <col>
+        <col>
+        <col>
+        <col>
+        <col>
+    </colgroup>
+    <thead>
+        <th>Hostname</th>
+        <th>Feed Name</th>
+        <th>Message ID</th>
+        <th>Block Count</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Status</th>
+    </thead>
+    <tbody>
+    {% for poll in polls %}
+        <tr>
+            <td>{{ poll.hostname }}</td><td>{{ poll.feed }}</td>
+            {% if poll.blk_count < 1 %}
+                <td title="Nothing to preview! This poll returned no data blocks.">{{ poll.mid }}</td>
+            {% else %}
+                <td><a class="pollid" href="#" id="{{ poll.poll_id }}">{{ poll.mid }}</a></td>
+            {% endif %}
+            <td>{{ poll.blk_count }}</td>
+            <td>{{ poll.start }}</td><td>{{ poll.end }}</td>
+            {% if poll.success %}
+                <td><font color="green">Poll Successful</font></td>
+            {% else %}
+                <td><font color="red">{{ poll.msg }}</font></td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% if imported %}
+{% with result=imported %}
+<style>
+    #ta_results tbody td:nth-child(2) {
+        text-align: center;
+    }
+</style>
+
+<div class="content_box">
+    <h3 class="titleheader">
+        <span>Successes: {{ result.successes }}</span>
+    </h3>
+    <table class="chart" id="ta_results" width="100%">
+        <colgroup>
+            <col width="150px">
+            <col width="50px" class='ccount'>
+            <col>
+        </colgroup>
+        <thead>
+            <th>Type</th>
+            <th>Count</th>
+            <th>Results</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Failures</td><td>{{ result.failures|length }}</td>
+                <td>
+                    <ul>
+                    {% for failure in result.failures %}
+                        <li>
+                            <b>{{failure.1}}</b>: {{failure.0}}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Events</td><td>{{ result.Event|length }}</td>
+                <td>
+                    <ul>
+                    {% for event in result.Event %}
+                        <li>
+                            <a href="{% url 'crits-core-views-details' 'Event' event.0 %}">{{ event.1 }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Certificates</td><td>{{ result.Certificate|length }}</td>
+                <td>
+                    <ul>
+                    {% for certificate in result.Certificate %}
+                        <li>
+                            <a href="{% url 'crits-core-views-details' 'Certificate' certificate.0 %}">{{ certificate.1 }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Domains</td><td>{{ result.Domain|length }}</td>
+                <td>
+                    <ul>
+                    {% for domain in result.Domain %}
+                        <li>
+                            <a href="{% url 'crits-core-views-details' 'Domain' domain.0 %}">{{ domain.1 }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Emails</td><td>{{ result.Email|length }}</td>
+                <td>
+                    <ul>
+                    {% for email in result.Email %}
+                        <li>
+                            <a href="{% url 'crits-core-views-details' 'Email' email.0 %}">{{ email.1 }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Indicators</td><td>{{ result.Indicator|length }}</td>
+                <td>
+                    <ul>
+                    {% for indicator in result.Indicator %}
+                        <li>
+                            <a href="{% url 'crits-core-views-details' 'Indicator' indicator.0 %}">{{ indicator.1 }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>IPs</td><td>{{ result.IP|length }}</td>
+                <td>
+                    <ul>
+                    {% for ip in result.IP %}
+                        <li>
+                            <a href="{% url 'crits-core-views-details' 'IP' ip.0 %}">{{ ip.1 }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>PCAPs</td><td>{{ result.PCAP|length }}</td>
+                <td>
+                    <ul>
+                    {% for pcap in result.PCAP %}
+                        <li>
+                            <a href="{% url 'crits-core-views-details' 'PCAP' pcap.0 %}">{{ pcap.1 }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Raw Data</td><td>{{ result.RawData|length }}</td>
+                <td>
+                    <ul>
+                    {% for rd in result.RawData %}
+                        <li>
+                            <a href="{% url 'crits-core-views-details' 'RawData' rd.0 %}">{{ rd.1 }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Samples</td><td>{{ result.Sample|length }}</td>
+                <td>
+                    <ul>
+                    {% for sample in result.Sample %}
+                        <li>
+                            <a href="{% url 'crits-core-views-details' 'Sample' sample.0 %}">{{ sample.1 }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Signatures</td><td>{{ result.Signature|length }}</td>
+                <td>
+                    <ul>
+                    {% for signature in result.Signature %}
+                        <li>
+                            <a href="{% url 'crits-core-views-details' 'Signature' signature.0 %}">{{ signature.1 }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endwith %}
+{% endif %}
+{% endblock %}
+
+<script>
+    $('a.pollid').click(function() {
+        var pid = $(this).attr('id');
+        if (pid == "None") {
+            alert("Nothing to preview! This poll returned no data blocks.");
+            return
+        }
+        $("#current_state").text("Processing...");
+        $("#taxii-loader").show();
+        $.ajax({
+            type: "GET",
+            url: "{% url 'taxii_service-views-get_import_preview' '1234' '1' '10' %}".replace("1234", pid),
+        }).done(function(data) { // run on successful request
+            if (data.success) { // at least some feeds were successfully processed
+                $("#results_container").html(data.html);
+                $("#current_state").text("STIX Import Preview");
+                $("#view_saved").prop('hidden', false);
+            } else { // some issue occurred
+                $("#error_container").children(".taxii_notice").html(data.msg);
+                $("#current_state").text("Problems");
+            }
+        }).fail(function(data) { // server error
+            $("#error_container").children(".taxii_notice").text("An unexpected server error occurred - notify an administrator.");
+            $("#current_state").text("Problems");
+        }).always(function() {
+            $("#taxii-loader").hide();
+        });
+    });
+</script>
