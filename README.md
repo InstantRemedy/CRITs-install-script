@@ -61,12 +61,6 @@ Change dir to crits directory
 
 cd /data/crits
 ```
-Run mongodb:
-```bash
-
-./contrib/mongo/mongod_start.sh
-```
-
 Create new admin:
 ```bash
 
@@ -96,3 +90,12 @@ In directory with CRITs use command
 python2 manage.py setconfig service_dirs /data/crits_services
 ```
 **----------------------------------**
+
+#ATTENTION
+
+After every restarting your system, you must start mongodb
+
+```bash
+
+/data/crits/contrib/mongo/mongod_start.sh
+```
