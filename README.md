@@ -91,7 +91,7 @@ python2 manage.py setconfig service_dirs /data/crits_services
 ```
 **----------------------------------**
 
-#ATTENTION
+# ATTENTION
 
 After every restarting your system, you must start mongodb
 
