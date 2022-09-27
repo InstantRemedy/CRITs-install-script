@@ -11,7 +11,9 @@ main()
 	cp ${CURDIR}/stable_requirements.txt ${HOME}/crits/stable_requirements.txt
 	cd ${HOME}/crits
 	./script/bootstrap
+	mv ${HOME}/crits /data/crits
 	cd ${CURDIR}
+	
 }
 
 main
