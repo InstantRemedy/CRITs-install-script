@@ -201,7 +201,7 @@ server_setup()
     if [ $? -eq 0 ]
     then
     	printf "\n\nDONE!\n\n\n\n"
-       printf "Create new admin: python2 ${PWD}/manage.py users -a -u admin -e admin@localhost.com -R UberAdmin\n"
+       printf "Create new admin: python2 /data/crits/manage.py users -a -u admin -e admin@localhost.com -R UberAdmin\n"
     	printf "Run server: ${PWD}/script/server\n\n\n"
     fi
 }
