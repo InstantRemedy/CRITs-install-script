@@ -14,7 +14,7 @@ HEAD=$(tput setaf 5) #magenta
 INFO=$(tput setaf 6) #cyan
 END=$(tput sgr0)   #ends color
 #============================================================
-PIP='pip'
+PIP='pip2'
 PYTH='python2'
 
 verify()
@@ -30,21 +30,7 @@ verify()
     fi
     printf "${INFO}Testing the distro type${END}\n"
     # Using lsb-release because os-release not available on Ubuntu 10.04
-    if [ -f /etc/redhat-release ];
-    then
-        OS=$(cat /etc/redhat-release | sed 's/ [Enterprise|release|Linux release].*//')
-        VER=$(cat /etc/redhat-release | sed 's/.*release //;s/ .*$//')
-        #Redhat/CentOS release version
-        if [ "$OS" != 'Fedora' ]
-        then
-            REL=$(echo $VER | sed 's/.[0-9].[0-9]*//;s/.[0-9]$//')
-            if [ "$REL" -lt '7' ];
-            then
-                #change for RHEL/CentOS < Release 7
-                PIP='pip2.7'
-            fi
-         fi
-    elif command -v lsb_release >/dev/null 2>&1
+    if command -v lsb_release >/dev/null 2>&1
     then
         OS=$(lsb_release -is)
         VER=$(lsb_release -rs)
@@ -158,29 +144,7 @@ server_setup()
     else
         echo "Database configuration file exists. skipping!"
     fi
-
-    # If MongoDB isn't already running, ask to start it.
-    # This can fail if MongoDB is running already but on a non-standard port.
-    pgrep mongod >/dev/null 2>&1
-    if [ $? -ne 0 ]
-    then
-      if [ "$IS_VAGRANT" ]
-      then
-        # For Vagrant, we always want to start Mongo automatically (though it
-        # should get started by the installation process).
-        start_mongo
-      else
-        while true; do
-          read -p "Do you want to start 'mongod' now? [yn] " yn
-          case $yn in
-              [Yy]* ) start_mongo; break;;
-              [Nn]* ) break;;
-              * ) echo "Please answer yes or no.";;
-          esac
-        done
-      fi
-    fi
-
+    start_mongo
     echo "Creating default collections"
     ${PYTH} manage.py create_default_collections
 
@@ -202,7 +166,7 @@ server_setup()
     then
     	printf "\n\nDONE!\n\n\n\n"
        printf "Create new admin: python2 /data/crits/manage.py users -a -u admin -e admin@localhost.com -R UberAdmin\n"
-    	printf "Run server: ${PWD}/script/server\n\n\n"
+    	printf "Run server: /data/crits/script/server\n\n\n"
     fi
 }
 
@@ -249,108 +213,6 @@ debian_install()
     # END ADDED
     sudo ldconfig
 }
-
-darwin_install()
-{
-    command -v brew >/dev/null 2>&1 || {
-    printf "${FAIL}Installation for OSX requires Homebrew. Please visit http://brew.sh/.${END}\n"
-    exit
-    }
-    brew install mongodb@3.2 ssdeep upx p7zip libyaml pcre libxml2 openssl
-    #brew install https://raw.githubusercontent.com/destijl/homebrew-versions/master/swig304.rb
-}
-
-freebsd_install()
-{
-    printf "${PASS}Installing ports${END}\n"
-    sudo -E pkg install mongodb ssdeep upx p7zip libyaml pcre libxml2 openssl py27-m2crypto py27-pydeep py27-ldap2 py27-mongoengine
-}
-
-red_hat_install()
-{
-    printf "${HEAD}Installing CRITs Dependencies${END}\n"
-    if [ ! -f /etc/yum.repos.d/epel.repo ];
-    then
-        printf "${INFO}Installing EPEL repo${END}\n"
-        sudo -E yum -y install epel-release
-    fi
-    if [ $REL -lt 7 ];
-    then
-        if [ ! -f /etc/yum.repos.d/ius.repo ];
-        then
-            printf "${INFO}Installing IUS repo${END}\n"
-            # python27 comes from here
-            sudo -E rpm -i http://dl.iuscommunity.org/pub/ius/stable/RedHat/${REL}/x86_64/ius-release-1.0-14.ius.el${REL}.noarch.rpm
-        fi
-        sudo -E yum -y install python27 python27-devel python27-pip
-    fi
-
-    printf "${INFO}Installing Packages${END}\n"
-    sudo -E yum -y install make gcc gcc-c++ kernel-devel git autoconf automake libtool openldap-devel pcre pcre-devel libjpeg-devel curl libpcap-devel python-devel python-pip libxml2-devel libxslt-devel libyaml-devel numactl ssdeep ssdeep-devel openssl-devel zip unzip gzip bzip2 firewall-cmd
-    sudo -E yum -y install p7zip p7zip-plugins
-    sudo -E yum -y install libffi-devel
-    sudo -E yum -y install libyaml
-    sudo -E yum -y install upx
-
-    printf "${INFO}Dependency Install Complete${END}\n"
-}
-
-centos_install()
-{
-    printf "${HEAD}Installing CRITs Dependencies${END}\n"
-    if [ ! -f /etc/yum.repos.d/rpmforge.repo ];
-    then
-        printf "${INFO}Installing RPMForge repo${END}\n"
-        sudo -E rpm --import http://dag.wiee.rs/RPM-GPG-KEY.dag.txt
-        sudo -E rpm -i http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el${REL}.rf.x86_64.rpm
-    fi
-    if [ ! -f /etc/yum.repos.d/epel.repo ];
-    then
-        printf "${INFO}Installing EPEL repo${END}\n"
-        sudo -E yum -y install epel-release
-    fi
-
-    if [ $REL -lt 7 ];
-    then
-        if [ ! -f /etc/yum.repos.d/ius.repo ];
-        then
-            printf "${INFO}Installing IUS repo${END}\n"
-            # python27 comes from here
-            sudo -E rpm -i http://dl.iuscommunity.org/pub/ius/stable/CentOS/${REL}/x86_64/ius-release-1.0-14.ius.centos${REL}.noarch.rpm
-
-        fi
-        sudo -E yum -y install python27 python27-devel python27-pip
-    fi
-
-    printf "${INFO}Installing Packages${END}\n"
-    sudo -E yum -y install make gcc gcc-c++ kernel-devel git autoconf automake libtool openldap-devel pcre pcre-devel libjpeg-devel curl libpcap-devel python-devel python-pip libxml2-devel libxslt-devel libyaml-devel numactl ssdeep ssdeep-devel openssl-devel zip unzip gzip bzip2 firewall-cmd
-    sudo -E yum -y install p7zip p7zip-plugins
-    sudo -E yum -y install libffi-devel
-    sudo -E yum -y install libyaml
-    sudo -E yum -y install upx
-
-    printf "${INFO}Dependency Install Complete${END}\n"
-}
-
-fedora_install()
-{
-    printf "${HEAD}Installing CRITs Dependencies${END}\n"
-    if [ ! -f /etc/yum.repos.d/epel.repo ];
-    then
-        printf "${INFO}Installing EPEL repo${END}\n"
-        sudo -E yum -y install epel-release
-    fi
-
-    printf "${INFO}Installing Packages${END}\n"
-    sudo -E yum -y install make gcc gcc-c++ kernel-devel git autoconf automake libtool openldap-devel pcre pcre-devel libjpeg-devel curl libpcap-devel python-devel python-pip libxml2-devel libxslt-devel libyaml-devel numactl ssdeep ssdeep-devel openssl-devel zip unzip gzip bzip2 firewall-cmd
-    sudo -E yum -y install p7zip p7zip-plugins
-    sudo -E yum -y install libffi-devel
-    sudo -E yum -y install libyaml
-    sudo -E yum -y install redhat-rpm-config
-    sudo -E yum -y install upx
-
-    printf "${INFO}Dependency Install Complete${END}\n"
-}
 #===============================================================
 # This is the Beginning of the Script
 #===============================================================
@@ -377,33 +239,8 @@ do
                 printf "${PASS}Debian is Supported!${END}\n"
                 debian_install || exit_restart $STEP
                 depend_crits ||exit_restart $STEP
-            elif [ "$OS" = 'darwin' ]
-            then
-                printf "${PASS}OS X is Supported!${END}\n"
-                darwin_install || exit_restart $STEP
-                depend_crits ||exit_restart $STEP
-            elif [ "$OS" = "centos" ]
-            then
-                printf "${PASS}CentOS is Supported!${END}\n"
-                centos_install || exit_restart $STEP
-                depend_crits ||exit_restart $STEP
-            elif [ "$OS" = "fedora" ]
-            then
-                printf "${PASS}Fedora is Supported!${END}\n"
-                fedora_install || exit_restart $STEP
-                depend_crits ||exit_restart $STEP
-            elif [ "$OS" = "red hat" ]
-            then
-                printf "${PASS}Red Hat is Supported!${END}\n"
-                red_hat_install || exit_restart $STEP
-                depend_crits ||exit_restart $STEP
-            elif [ "$OS" = 'freebsd' ]
-            then
-                printf "${PASS}FreeBSD is Supported${END}\n"
-                freebsd_install || exit_restart $STEP
-                depend_crits ||exit_restart $STEP
             else
-                printf "${FAIL}OS: $OS, need Ubuntu, Debian, Darwin (OS X), CentOS, Red Hat, or FreeBSD${END}\n"
+                printf "${FAIL}OS: $OS, need Ubuntu, Debian\n"
                 exit
             fi
             ;;
