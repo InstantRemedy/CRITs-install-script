@@ -19,7 +19,7 @@ pillow==6.2.2
 mod_pywebsocket==0.7.9
 pexpect==4.8.0
 pyinstaller==3.6
-yara==1.7.7
+yara-python==3.5.0
 pype32==0.1a5
 pycrypto==2.6.1
 shodan==1.28.0
