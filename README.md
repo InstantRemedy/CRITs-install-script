@@ -38,15 +38,6 @@ In directory with repository run "start": f. e.
 
 ./install_crits
 ````
-If console print:
-``` bash
-
-"Do you want to start 'mongod' now? [yn] " yn
-
-```
-press "y" and "Enter".
-
-
 After script completion in directory "/data" added directory "crits".
 ```bash
 
