@@ -19,7 +19,7 @@ You need install and configure "sudo".
 Clone this repository:
 ``` bash
 
-cd https://github.com/krys3331/CRITs-install-script
+git clone https://github.com/krys3331/CRITs-install-script
 ```
 
 Give executable mod for all files
