@@ -33,7 +33,7 @@ chmod +x ./*
 
 ## STEP 2
 
-In directory with repository run "install_script":
+In directory with repository run "install_crits":
 ``` bash
 
 ./install_crits
