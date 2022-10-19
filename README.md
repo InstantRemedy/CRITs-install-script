@@ -61,7 +61,7 @@ python2 ./manage.py users -a -u admin -e "Your email" -R UberAdmin
 Run server:
 ```bash
 
-./script/server'
+./script/server
 ```
 
 # Installing services
